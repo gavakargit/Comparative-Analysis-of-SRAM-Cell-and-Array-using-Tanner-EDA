@@ -1,0 +1,35 @@
+   .measure tpdr                                                         (Calculation of rise time  Delay)
+ +trig v(11) val ='2.5' fall=1
+ +targ v(10) val ='2.5' rise=1
+   .measure tpdf                                                         (Calculation of fall time delay)
+ +trig v(11) val ='2.5' rise=1
+ +targ v(10) val ='2.5' fall=1
+  .measure tpd param ='(tpdr+tpdf)/2                 (calculation of propagation delay)  
+
+
+another form
+
+  .PRINT TRAN V(Out)
+  .PRINT TRAN V(In)
+  .MEASURE TRAN RiseDelay_MeasureDelay_1 TRIG v(In) VAL='2.5' fall=1
+  .MEASURE TRAN RiseDelay_MeasureDelay_1 TRIG v(Out) VAL='2.5' rise=1
+  .MEASURE TRAN FallDelay_MeasureDelay_1 TRIG v(In) VAL='2.5' rise=1 
+  .MEASURE TRAN FallDelay_MeasureDelay_1 TRIG v(Out) VAL='2.5' fall=1
+  .MEASURE TRAN AvgDelay
+  PARAM='(RiseDelay_MeasureDelay_1+FallDelay_MeasureDelay_1)/2.0'
+ 
+  
+  another form
+  
+  .PRINT TRAN V(Out)
+.PRINT TRAN V(In)
+.MEASURE TRAN RiseDelay_MeasureDelay_1 TRIG v(In) VAL='(Vpwr-0)*50/100+0'
+TD='0' RISE=1 TARG v(Out) VAL='(Vpwr-0)*50/100+0' TD='0' FALL=1 OFF
+.MEASURE TRAN FallDelay_MeasureDelay_1 TRIG v(In) VAL='(Vpwr-0)*50/100+0'
+TD='0' FALL=1 TARG v(Out) VAL='(Vpwr-0)*50/100+0' TD='0' RISE=1 OFF
+.MEASURE TRAN AvgDelay
+PARAM='(RiseDelay_MeasureDelay_1+FallDelay_MeasureDelay_1)/2.0' ON
+.MEASURE TRAN FallTime TRIG v(Out) VAL='(Vpwr-0)*90/100+0' TD=0 Fall=1 TARG
+v(Out) VAL='(Vpwr-0)*10/100+0' TD=0 FALL=1 ON
+.MEASURE TRAN RiseTime TRIG v(Out) VAL='(Vpwr-0)*10/100+0' TD=0 RISE=1 TARG
+v(Out) VAL='(Vpwr-0)*90/100+0' TD=0 RISE=1 ON
